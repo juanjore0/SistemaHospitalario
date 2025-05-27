@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QLineEdit, QHBoxLayout, QPushButton
 
-class CreateHospitalDialog(QDialog):
+class CreateDoctorDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -35,5 +35,9 @@ class CreateHospitalDialog(QDialog):
         self.ok_button.clicked.connect(self.accept)
         self.cancel_button.clicked.connect(self.reject)
 
-    def get_name(self):
-        return self.name_input.text().strip()
+    def get_data(self):
+        return {
+            self.name_input.text().strip(),
+            self.dni_input.text().strip(),
+            self.specialty_input.text().strip()
+        }
