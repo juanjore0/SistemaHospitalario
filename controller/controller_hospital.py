@@ -1,5 +1,6 @@
 from model.hospital import Hospital
 from controller.storage import hospitals
+from model.doctor import Doctor
 
 def create_hospital(name):
     """
@@ -25,3 +26,11 @@ def find_hospital(name):
         if hospital.hospital_name == name:
             return hospital
     return None
+
+def add_doctor_to_hospital(hospital_name, doctor_name, speciality, dni):
+    for hospital in hospitals:
+        if hospital.hospital_name == hospital_name:
+            new_doctor = Doctor(doctor_name, speciality, dni)
+            hospital.append_doctor(new_doctor)
+            return True
+    return False

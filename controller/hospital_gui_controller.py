@@ -3,10 +3,13 @@ from GUI.create_hospital_dialog import CreateHospitalDialog  # Ajusta el import 
 from . import controller_hospital
 from controller.storage import hospitals
 from PyQt5.QtWidgets import QTableWidgetItem
+from controller.controller_hospital import find_hospital
+from controller.controller_doctor import search_by_dni
 
 class HospitalGUIController:
-    def __init__(self, view):
+    def __init__(self, view, assign_tab=None):
         self.view = view
+        self.assign_tab = assign_tab  # Inicializa assign_tab como None
         self.view.add_hospital_button.clicked.connect(self.open_create_hospital_dialog)
         self.view.delete_hospital_button.clicked.connect(self.delete_selected_hospital)
         self.refresh_table()
@@ -23,6 +26,7 @@ class HospitalGUIController:
                 return
             controller_hospital.create_hospital(name)
             self.refresh_table()
+            self.update_assign_tab()
 
     def delete_selected_hospital(self):
         row = self.view.hospital_table.currentRow()
@@ -32,6 +36,7 @@ class HospitalGUIController:
         name = self.view.hospital_table.item(row, 0).text()
         controller_hospital.delete_hospital(name)
         self.refresh_table()
+        self.update_assign_tab()
 
     def refresh_table(self):
         self.view.hospital_table.setRowCount(0)
@@ -40,3 +45,11 @@ class HospitalGUIController:
             self.view.hospital_table.setItem(i, 0, QTableWidgetItem(hospital.hospital_name))
             self.view.hospital_table.setItem(i, 1, QTableWidgetItem(str(len(hospital.doctors))))
         self.view.hospital_table.resizeColumnsToContents()
+
+    def update_assign_tab(self):
+        if self.assign_tab:
+            hospital_names = [h.hospital_name for h in hospitals]
+            doctor_dnis = [d.dni for h in hospitals for d in h.doctors]
+            self.assign_tab.update_data(hospital_names, doctor_dnis)
+    
+    
