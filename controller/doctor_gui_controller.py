@@ -23,7 +23,7 @@ class DoctorGUIController:
                 return
             self.refresh_table()
 
-    """def delete_selected_doctor(self):
+    def delete_selected_doctor(self):
         row = self.view.doctor_table.currentRow()
         if row < 0:
             return
@@ -39,7 +39,7 @@ class DoctorGUIController:
             self.refresh_table()
         else:
             QMessageBox.warning(self.view, "Error", "No se pudo eliminar el doctor.")
-    """
+
     def refresh_table(self):
         self.view.doctor_table.setRowCount(0)
         row_index = 0

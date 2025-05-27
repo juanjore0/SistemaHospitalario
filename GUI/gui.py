@@ -5,6 +5,7 @@ from GUI.addDoctor import DoctorTab
 
 # Importa el controlador gráfico que conecta la lógica con la vista
 from controller.hospital_gui_controller import HospitalGUIController
+from controller.doctor_gui_controller import DoctorGUIController
 
 class HospitalSystem(QWidget):
     def __init__(self):
@@ -21,6 +22,7 @@ class HospitalSystem(QWidget):
         print("Creando controlador HospitalGUIController")
 
         self.controller_hospital = HospitalGUIController(self.hospitals_tab)
+        self.controller_doctor = DoctorGUIController(self.doctors_tab)
 
         self.tabs.addTab(self.hospitals_tab, "Hospitales")
         self.tabs.addTab(self.doctors_tab, "Doctores")
