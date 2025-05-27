@@ -21,3 +21,15 @@ def search_by_dni(dni):
                     "DNI": doctor.dni
                 }
     return None
+
+def delete_hospital(name):
+    global hospitals
+    hospitals = [hospital for hospital in hospitals if hospital.hospital_name != name]
+
+def delete_doctor(dni, hospital_name):
+    for hospital in hospitals:
+        if hospital.hospital_name == hospital_name:
+            hospital.doctors = [doctor for doctor in hospital.doctors if doctor.dni != dni]
+            if not hospital.doctors:
+                delete_hospital(hospital_name)
+            break  # Ya lo encontramos, no necesitamos seguir buscando
