@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QTableWidget, QPushButton
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QTableWidget, QPushButton, QHeaderView
 
 class HospitalTab(QWidget):
     def __init__(self):
@@ -16,6 +16,9 @@ class HospitalTab(QWidget):
         self.hospital_table.setColumnCount(2)
         self.hospital_table.setHorizontalHeaderLabels(['Nombre', 'Doctores'])
         layout.addWidget(self.hospital_table)
+
+        # Hacer que las columnas ocupen todo el ancho
+        self.hospital_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
         self.hospital_table.setStyleSheet("""
         QTableWidget {
