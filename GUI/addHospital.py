@@ -48,24 +48,36 @@ class HospitalTab(QWidget):
         self.add_hospital_button.setStyleSheet("""
             QPushButton {
                 background-color: #007acc;
-                color: black;
+                color: white;
                 border-radius: 6px;
-                padding: 6px 10px;
+                padding: 8px 12px;
+                font-weight: bold;
+                font-size: 13px;
+                min-height: 30px;
             }
             QPushButton:hover {
                 background-color: #005f99;
+            }
+            QPushButton:pressed {
+                background-color: #004080;
             }
         """)
 
         self.delete_hospital_button.setStyleSheet("""
             QPushButton {
-                background-color: #a6a6a6;
-                color: black;
+                background-color: #dc3545;
+                color: white;
                 border-radius: 6px;
-                padding: 6px 10px;
+                padding: 8px 12px;
+                font-weight: bold;
+                font-size: 13px;
+                min-height: 30px;
             }
             QPushButton:hover {
-                background-color: #808080;
+                background-color: #c82333;
+            }
+            QPushButton:pressed {
+                background-color: #bd2130;
             }
         """)
         

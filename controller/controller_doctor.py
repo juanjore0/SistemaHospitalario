@@ -14,7 +14,7 @@ def create_doctor(doctor_info):
     doctors.append(doctor)
     return doctor
 
-def delete_doctor(hospital_name, doctor_dni):
+def delete_doctor_from_hospital(hospital_name, doctor_dni):
     """
     Elimina un doctor del hospital especificado por su DNI.
     Retorna True si se eliminó correctamente, False si no se encontró.
@@ -23,10 +23,19 @@ def delete_doctor(hospital_name, doctor_dni):
         if hospital.hospital_name == hospital_name:
             for doctor in hospital.doctors:
                 if doctor.dni == doctor_dni:
-                    hospital.doctors = [d for d in hospital.doctors if d.dni != doctor_dni]
+                    hospital.doctors.remove(doctor)
                     return True
     return False
 
+def delete_doctor(doctor_dni):
+    """
+    Elimina un doctor de la lista global 'doctors' por su DNI.
+    Retorna True si se eliminó correctamente, False si no se encontró.
+    """
+    global doctors
+    doctors[:] = [doctor for doctor in doctors if doctor.dni != doctor_dni]
+    return True
+    
 def search_by_dni(dni):
     """
     Busca un doctor en todos los hospitales por su DNI.

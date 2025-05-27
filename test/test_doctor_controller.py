@@ -2,6 +2,7 @@ import unittest
 from model.doctor import Doctor
 from model.hospital import Hospital
 import controller.controller_doctor as controller
+from controller.storage import hospitals, doctors  # Lista global de hospitales y doctores
 
 class TestDoctorController(unittest.TestCase):
     def setUp(self):
@@ -18,14 +19,16 @@ class TestDoctorController(unittest.TestCase):
 
     def test_add_doctor_to_hospital(self):
         hospital = Hospital("San José")
-        controller.hospitals.append(hospital)
+        hospitals.append(hospital)  # Muy importante: agregar hospital a la lista global
 
-        info = {"doctor_name": "Carlos", "speciality": "Cardiología", "dni": "456"}
-        result = controller.add_doctor_to_hospital("San José", info)
+        # Crear doctor y agregarlo a la lista global (doctors)
+        doctor_info = {"doctor_name": "Dr. Juan", "speciality": "Cardiología", "dni": "123"}
+        doctor = controller.create_doctor(doctor_info)  # Esto agrega a doctors
 
+        result = controller.add_doctor_to_hospital("San José", "123")
         self.assertTrue(result)
-        self.assertEqual(len(hospital.doctors), 1)
-        self.assertEqual(hospital.doctors[0].doctor_name, "Carlos")
+        self.assertIn(doctor, hospital.doctors)
+        self.assertNotIn(doctor, doctors)
 
     def test_delete_doctor_from_hospital(self):
         hospital = Hospital("Central")
