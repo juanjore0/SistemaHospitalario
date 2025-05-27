@@ -1,7 +1,11 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QTabWidget
-from addHospital import HospitalTab
-from addDoctor import DoctorTab
+from GUI.addHospital import HospitalTab
+
+from GUI.addDoctor import DoctorTab
+
+# Importa el controlador gráfico que conecta la lógica con la vista
+from controller.hospital_gui_controller import HospitalGUIController
 
 class HospitalSystem(QWidget):
     def __init__(self):
@@ -16,6 +20,8 @@ class HospitalSystem(QWidget):
         self.hospitals_tab = HospitalTab()
         self.doctors_tab = DoctorTab()
 
+        self.hospital_controller = HospitalGUIController(self.hospitals_tab)
+
         self.tabs.addTab(self.hospitals_tab, "Hospitales")
         self.tabs.addTab(self.doctors_tab, "Doctores")
 
@@ -24,6 +30,7 @@ class HospitalSystem(QWidget):
         self.setLayout(main_layout)
 
 if __name__ == '__main__':
+    print("Iniciando app")
     app = QApplication(sys.argv)
     window = HospitalSystem()
     window.show()
