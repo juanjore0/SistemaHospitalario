@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QTableWidget, QPushButton
 
+
 class DoctorTab(QWidget):
     def __init__(self):
         super().__init__()
@@ -16,7 +17,7 @@ class DoctorTab(QWidget):
         self.doctor_table.setColumnCount(4)
         self.doctor_table.setHorizontalHeaderLabels(['Hospital', 'Nombre', 'DNI', 'Especialidad'])
         layout.addWidget(self.doctor_table)
-        
+
         self.doctor_table.setStyleSheet("""
         QTableWidget {
         background-color: #ffffff;
@@ -39,33 +40,51 @@ class DoctorTab(QWidget):
         background-color: #cce5ff;
     }
     """)
-        
-        # Botones
+
+        # Botones con ancho completo
         button_layout = QHBoxLayout()
-        self.add_doctor_button = QPushButton('Agregar médico')
-        self.delete_doctor_button = QPushButton('Eliminar médico')
+        self.add_doctor_button = QPushButton('Asignar doctor a hospital')
+        self.delete_doctor_button = QPushButton('Eliminar doctor de hospital')
+
+        # Hacer que los botones se expandan para llenar toda la barra
+        self.add_doctor_button.setSizePolicy(self.add_doctor_button.sizePolicy().Expanding, 
+                                           self.add_doctor_button.sizePolicy().Fixed)
+        self.delete_doctor_button.setSizePolicy(self.delete_doctor_button.sizePolicy().Expanding, 
+                                              self.delete_doctor_button.sizePolicy().Fixed)
 
         self.add_doctor_button.setStyleSheet("""
             QPushButton {
                 background-color: #007acc;
-                color: black;
+                color: white;
                 border-radius: 6px;
-                padding: 6px 10px;
+                padding: 8px 12px;
+                font-weight: bold;
+                font-size: 13px;
+                min-height: 30px;
             }
             QPushButton:hover {
                 background-color: #005f99;
+            }
+            QPushButton:pressed {
+                background-color: #004080;
             }
         """)
 
         self.delete_doctor_button.setStyleSheet("""
             QPushButton {
-                background-color: #a6a6a6;
-                color: black;
+                background-color: #dc3545;
+                color: white;
                 border-radius: 6px;
-                padding: 6px 10px;
+                padding: 8px 12px;
+                font-weight: bold;
+                font-size: 13px;
+                min-height: 30px;
             }
             QPushButton:hover {
-                background-color: #808080;
+                background-color: #c82333;
+            }
+            QPushButton:pressed {
+                background-color: #bd2130;
             }
         """)
 
