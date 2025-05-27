@@ -12,6 +12,12 @@ class DoctorGUIController:
         self.view.delete_doctor_button.clicked.connect(self.delete_selected_doctor)
         self.refresh_table()
 
+    def set_assign_tab(self, assign_tab):
+        """
+        Guarda la referencia a la pestaña de asignación para poder interactuar con ella.
+        """
+        self.assign_tab = assign_tab
+
     def open_create_doctor_dialog(self):
         dialog = CreateDoctorDialog(self.view)
         if dialog.exec_() == QDialog.Accepted:
@@ -28,21 +34,28 @@ class DoctorGUIController:
 
     def refresh_table(self):
         self.view.doctor_table.setRowCount(0)
-        for i, doctor in enumerate(doctors):
-            self.view.doctor_table.insertRow(i)
-            self.view.doctor_table.setItem(i, 0, QTableWidgetItem(doctor.hospital_name if doctor.hospital_name else ""))
-            self.view.doctor_table.setItem(i, 1, QTableWidgetItem(doctor.name))
-            self.view.doctor_table.setItem(i, 2, QTableWidgetItem(doctor.dni))
-            self.view.doctor_table.setItem(i, 3, QTableWidgetItem(doctor.specialty))
-        
+
+        all_doctors = controller_doctor.get_all_doctors()
+
+        row = 0  # <- ¡IMPORTANTE!
+
+        for doctor in all_doctors:
+            # Determinar hospital asignado
+            assigned_hospital = "No asignado"
+            for hospital in hospitals:
+                if doctor in hospital.doctors:
+                    assigned_hospital = hospital.hospital_name
+                    break
+
+            self.view.doctor_table.insertRow(row)
+            self.view.doctor_table.setItem(row, 0, QTableWidgetItem(assigned_hospital))
+            self.view.doctor_table.setItem(row, 1, QTableWidgetItem(doctor.doctor_name))
+            self.view.doctor_table.setItem(row, 2, QTableWidgetItem(doctor.dni))
+            self.view.doctor_table.setItem(row, 3, QTableWidgetItem(doctor.speciality))
+            row += 1
+
         self.view.doctor_table.resizeColumnsToContents()
 
-        # Esto actualiza la pestaña de asignaciones si se pasó
-        if self.assign_tab:
-            self.assign_tab.update_data(
-                [h.hospital_name for h in hospitals],
-                [d.dni for d in doctors]
-            )
             
     def delete_selected_doctor(self):
         row = self.view.doctor_table.currentRow()

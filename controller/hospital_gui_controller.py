@@ -14,6 +14,9 @@ class HospitalGUIController:
         self.view.delete_hospital_button.clicked.connect(self.delete_selected_hospital)
         self.refresh_table()
 
+    def set_assign_tab(self, assign_tab):
+        self.assign_tab = assign_tab
+
     def open_create_hospital_dialog(self):
         dialog = CreateHospitalDialog(self.view)
         if dialog.exec_() == QDialog.Accepted:

@@ -9,7 +9,7 @@ class DoctorGUIController:
     def __init__(self, view):
         self.view = view
         self.view.add_doctor_button.clicked.connect(self.assign_doctor_to_hospital)
-        self.view.delete_doctor_button.clicked.connect(self.remove_doctor_from_hospital)
+        self.view.delete_doctor_button.clicked.connect(self.delete_doctor_from_hospital)
         self.refresh_table()
 
     def assign_doctor_to_hospital(self):
@@ -46,7 +46,7 @@ class DoctorGUIController:
         except Exception as e:
             QMessageBox.warning(self.view, "Error", f"No se pudo asignar el doctor: {str(e)}")
 
-    def remove_doctor_from_hospital(self):
+    def delete_doctor_from_hospital(self):
         """
         Elimina un doctor de un hospital pidiendo el DNI del doctor y nombre del hospital.
         """
@@ -127,3 +127,9 @@ class DoctorGUIController:
             row += 1
         
         self.view.doctor_table.resizeColumnsToContents()
+
+    def set_assign_tab(self, assign_tab):
+        """
+        Guarda la referencia a la pestaña AssignDoctorTab para que este controlador pueda actualizar sus combos.
+        """
+        self.assign_tab = assign_tab
