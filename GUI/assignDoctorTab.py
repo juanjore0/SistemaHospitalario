@@ -1,4 +1,8 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QComboBox, QPushButton, QHBoxLayout, QMessageBox, QLineEdit
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QHBoxLayout, QPushButton, QMessageBox, QInputDialog
+from PyQt5.QtCore import Qt
+from controller import controller_doctor
+from controller import controller_hospital
+from controller.storage import doctors, hospitals
 
 class AssignDoctorTab(QWidget):
     def __init__(self, controller):
@@ -7,17 +11,32 @@ class AssignDoctorTab(QWidget):
 
         layout = QVBoxLayout()
 
-        layout.addWidget(QLabel("Nombre del hospital:"))
-        self.hospital_input = QLineEdit()
-        layout.addWidget(self.hospital_input)
-
-        layout.addWidget(QLabel("DNI del doctor:"))
-        self.doctor_input = QLineEdit()
-        layout.addWidget(self.doctor_input)
+        self.title_label = QLabel("Asignar o Eliminar Doctor de un Hospital")
+        self.title_label.setStyleSheet("font-size: 20px; font-weight: bold;")
+        self.title_label.setAlignment(Qt.AlignCenter)
+        layout.addWidget(self.title_label)
 
         button_layout = QHBoxLayout()
+        button_layout.setAlignment(Qt.AlignCenter)
+
         self.assign_button = QPushButton("Asignar doctor")
         self.delete_button = QPushButton("Eliminar doctor")
+
+        # Estilo para agrandar botones
+        btn_common_style = """
+            font-size: 16px;
+            padding: 12px 24px;
+            min-width: 150px;
+            min-height: 40px;
+            color: white;
+            border: none;
+            border-radius: 6px;
+        """
+
+        # Asignar estilos específicos de color
+        self.assign_button.setStyleSheet(btn_common_style + "background-color: #007bff;")  # azul
+        self.delete_button.setStyleSheet(btn_common_style + "background-color: #dc3545;")  # rojo
+
         button_layout.addWidget(self.assign_button)
         button_layout.addWidget(self.delete_button)
 
@@ -28,32 +47,36 @@ class AssignDoctorTab(QWidget):
         self.delete_button.clicked.connect(self.delete_doctor_from_hospital)
 
     def update_data(self, hospitals, doctors):
-        # Este método puede quedar vacío o actualizar listas internas si usas combos
-        # Si usas QLineEdit para inputs, no necesitas actualizar combos, pero podrías sugerir autocompletar aquí
         pass
 
     def assign_doctor_to_hospital(self):
-        hospital_name = self.hospital_input.text().strip()
-        doctor_dni = self.doctor_input.text().strip()
-
-        if not hospital_name or not doctor_dni:
-            QMessageBox.warning(self, "Error", "Debe ingresar ambos datos.")
+        dni, ok = QInputDialog.getText(self, "Asignar Doctor", "Ingrese el DNI del doctor:")
+        if not ok or not dni.strip():
             return
-
-        if self.controller.assign_doctor(hospital_name, doctor_dni):
-            QMessageBox.information(self, "Éxito", "Doctor asignado correctamente.")
+        hospital_name, ok = QInputDialog.getText(self, "Asignar Doctor", "Ingrese el nombre del hospital:")
+        if not ok or not hospital_name.strip():
+            return
+        
+        success = controller_doctor.add_doctor_to_hospital(hospital_name.strip(), dni.strip())
+        if success:
+            QMessageBox.information(self, "Éxito", f"Doctor con DNI {dni.strip()} asignado al hospital {hospital_name.strip()}.")
+            if hasattr(self.controller, "refresh_table"):
+                self.controller.refresh_table()
         else:
-            QMessageBox.warning(self, "Error", "No se pudo asignar el doctor.")
+            QMessageBox.warning(self, "Error", "No se pudo asignar el doctor. Verifique que el hospital y doctor existan y que el doctor no esté ya asignado.")
 
     def delete_doctor_from_hospital(self):
-        hospital_name = self.hospital_input.text().strip()
-        doctor_dni = self.doctor_input.text().strip()
-
-        if not hospital_name or not doctor_dni:
-            QMessageBox.warning(self, "Error", "Debe ingresar ambos datos.")
+        dni, ok = QInputDialog.getText(self, "Eliminar Doctor", "Ingrese el DNI del doctor:")
+        if not ok or not dni.strip():
             return
-
-        if self.controller.delete_doctor(hospital_name, doctor_dni):
-            QMessageBox.information(self, "Éxito", "Doctor eliminado correctamente.")
+        hospital_name, ok = QInputDialog.getText(self, "Eliminar Doctor", "Ingrese el nombre del hospital:")
+        if not ok or not hospital_name.strip():
+            return
+        
+        success = controller_doctor.delete_doctor_from_hospital(hospital_name.strip(), dni.strip())
+        if success:
+            QMessageBox.information(self, "Éxito", f"Doctor con DNI {dni.strip()} eliminado del hospital {hospital_name.strip()}.")
+            if hasattr(self.controller, "refresh_table"):
+                self.controller.refresh_table()
         else:
-            QMessageBox.warning(self, "Error", "No se pudo eliminar el doctor.")
+            QMessageBox.warning(self, "Error", "No se pudo eliminar el doctor. Verifique que el hospital y doctor existan y que el doctor esté asignado al hospital.")

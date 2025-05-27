@@ -47,6 +47,8 @@ class HospitalGUIController:
         if hospital and doctor:
             try:
                 hospital.add_doctor(doctor)
+                self.refresh_table()           # <--- refrescar tabla aquí
+                self.update_assign_tab()       # <--- refrescar datos en pestaña asignar doctor
                 return True
             except Exception as e:
                 print(f"Error asignando doctor: {e}")
@@ -60,11 +62,14 @@ class HospitalGUIController:
         if hospital and doctor and doctor in hospital.doctors:
             try:
                 hospital.remove_doctor(doctor)
+                self.refresh_table()           # <--- refrescar tabla aquí
+                self.update_assign_tab()       # <--- refrescar datos en pestaña asignar doctor
                 return True
             except Exception as e:
                 print(f"Error eliminando doctor: {e}")
                 return False
         return False
+
 
     def refresh_table(self):
         self.view.hospital_table.setRowCount(0)
