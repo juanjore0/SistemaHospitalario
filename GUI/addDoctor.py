@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QTableWidget, QPushButton
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QTableWidget, QPushButton, QHeaderView
 
 
 class DoctorTab(QWidget):
@@ -17,6 +17,8 @@ class DoctorTab(QWidget):
         self.doctor_table.setColumnCount(4)
         self.doctor_table.setHorizontalHeaderLabels(['Hospital', 'Nombre', 'DNI', 'Especialidad'])
         layout.addWidget(self.doctor_table)
+
+        self.doctor_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
         self.doctor_table.setStyleSheet("""
         QTableWidget {
@@ -43,8 +45,8 @@ class DoctorTab(QWidget):
 
         # Botones con ancho completo
         button_layout = QHBoxLayout()
-        self.add_doctor_button = QPushButton('Asignar doctor a hospital')
-        self.delete_doctor_button = QPushButton('Eliminar doctor de hospital')
+        self.add_doctor_button = QPushButton('Crear doctor')
+        self.delete_doctor_button = QPushButton('Eliminar doctor')
 
         # Hacer que los botones se expandan para llenar toda la barra
         self.add_doctor_button.setSizePolicy(self.add_doctor_button.sizePolicy().Expanding, 
