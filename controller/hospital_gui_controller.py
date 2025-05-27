@@ -1,26 +1,28 @@
-from PyQt5.QtWidgets import QTableWidgetItem
-from controller import controller_hospital
+from PyQt5.QtWidgets import QMessageBox, QDialog
+from GUI.create_hospital_dialog import CreateHospitalDialog  # Ajusta el import según tu estructura
+from . import controller_hospital
 from controller.storage import hospitals
+from PyQt5.QtWidgets import QTableWidgetItem
 
 class HospitalGUIController:
     def __init__(self, view):
         self.view = view
-
-        # Conectar botones
-        self.view.add_hospital_button.clicked.connect(self.add_hospital)
+        self.view.add_hospital_button.clicked.connect(self.open_create_hospital_dialog)
         self.view.delete_hospital_button.clicked.connect(self.delete_selected_hospital)
-
         self.refresh_table()
 
-    def add_hospital(self):
-        name = self.view.search_hospital.text().strip()
-        if not name:
-            return
-        if controller_hospital.find_hospital(name):  # Evitar duplicados
-            return
-        controller_hospital.create_hospital(name)
-        self.view.search_hospital.clear()
-        self.refresh_table()
+    def open_create_hospital_dialog(self):
+        dialog = CreateHospitalDialog(self.view)
+        if dialog.exec_() == QDialog.Accepted:
+            name = dialog.get_name()
+            if not name:
+                QMessageBox.warning(self.view, "Error", "El nombre no puede estar vacío.")
+                return
+            if controller_hospital.find_hospital(name):
+                QMessageBox.warning(self.view, "Error", "El hospital ya existe.")
+                return
+            controller_hospital.create_hospital(name)
+            self.refresh_table()
 
     def delete_selected_hospital(self):
         row = self.view.hospital_table.currentRow()
@@ -37,3 +39,4 @@ class HospitalGUIController:
             self.view.hospital_table.insertRow(i)
             self.view.hospital_table.setItem(i, 0, QTableWidgetItem(hospital.hospital_name))
             self.view.hospital_table.setItem(i, 1, QTableWidgetItem(str(len(hospital.doctors))))
+        self.view.hospital_table.resizeColumnsToContents()
