@@ -68,6 +68,7 @@ class HospitalTab(QWidget):
                 background-color: #808080;
             }
         """)
+        
         button_layout.addWidget(self.add_hospital_button)
         button_layout.addWidget(self.delete_hospital_button)
 
