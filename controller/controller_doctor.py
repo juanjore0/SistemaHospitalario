@@ -22,7 +22,7 @@ def delete_doctor(hospital_name, doctor_dni):
         if hospital.hospital_name == hospital_name:
             for doctor in hospital.doctors:
                 if doctor.dni == doctor_dni:
-                    hospital.remove_doctor(doctor)
+                    hospital.doctors = [d for d in hospital.doctors if d.dni != doctor_dni]
                     return True
     return False  # Doctor no encontrado
 
