@@ -1,1 +1,2 @@
 hospitals = []
+doctors = []
