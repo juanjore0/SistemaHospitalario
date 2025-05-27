@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QComboBox, QPushButton, QMessageBox
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QComboBox, QPushButton, QHBoxLayout, QMessageBox, QLineEdit
 
 class AssignDoctorTab(QWidget):
     def __init__(self, controller):
@@ -7,13 +7,13 @@ class AssignDoctorTab(QWidget):
 
         layout = QVBoxLayout()
 
-        layout.addWidget(QLabel("Seleccione un hospital:"))
-        self.hospital_combo = QComboBox()
-        layout.addWidget(self.hospital_combo)
+        layout.addWidget(QLabel("Nombre del hospital:"))
+        self.hospital_input = QLineEdit()
+        layout.addWidget(self.hospital_input)
 
-        layout.addWidget(QLabel("Seleccione un doctor:"))
-        self.doctor_combo = QComboBox()
-        layout.addWidget(self.doctor_combo)
+        layout.addWidget(QLabel("DNI del doctor:"))
+        self.doctor_input = QLineEdit()
+        layout.addWidget(self.doctor_input)
 
         button_layout = QHBoxLayout()
         self.assign_button = QPushButton("Asignar doctor")
@@ -24,20 +24,21 @@ class AssignDoctorTab(QWidget):
         layout.addLayout(button_layout)
         self.setLayout(layout)
 
-        # Conexiones
         self.assign_button.clicked.connect(self.assign_doctor_to_hospital)
         self.delete_button.clicked.connect(self.delete_doctor_from_hospital)
 
     def update_data(self, hospitals, doctors):
-        self.hospital_combo.clear()
-        self.hospital_combo.addItems(hospitals)
-
-        self.doctor_combo.clear()
-        self.doctor_combo.addItems(doctors)
+        # Este método puede quedar vacío o actualizar listas internas si usas combos
+        # Si usas QLineEdit para inputs, no necesitas actualizar combos, pero podrías sugerir autocompletar aquí
+        pass
 
     def assign_doctor_to_hospital(self):
-        hospital_name = self.hospital_combo.currentText()
-        doctor_dni = self.doctor_combo.currentText()
+        hospital_name = self.hospital_input.text().strip()
+        doctor_dni = self.doctor_input.text().strip()
+
+        if not hospital_name or not doctor_dni:
+            QMessageBox.warning(self, "Error", "Debe ingresar ambos datos.")
+            return
 
         if self.controller.assign_doctor(hospital_name, doctor_dni):
             QMessageBox.information(self, "Éxito", "Doctor asignado correctamente.")
@@ -45,8 +46,12 @@ class AssignDoctorTab(QWidget):
             QMessageBox.warning(self, "Error", "No se pudo asignar el doctor.")
 
     def delete_doctor_from_hospital(self):
-        hospital_name = self.hospital_combo.currentText()
-        doctor_dni = self.doctor_combo.currentText()
+        hospital_name = self.hospital_input.text().strip()
+        doctor_dni = self.doctor_input.text().strip()
+
+        if not hospital_name or not doctor_dni:
+            QMessageBox.warning(self, "Error", "Debe ingresar ambos datos.")
+            return
 
         if self.controller.delete_doctor(hospital_name, doctor_dni):
             QMessageBox.information(self, "Éxito", "Doctor eliminado correctamente.")

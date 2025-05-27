@@ -74,7 +74,4 @@ class DoctorGUIController:
             QMessageBox.warning(self.view, "Error", "No se pudo eliminar el doctor.")
 
     def update_assign_tab(self):
-        if self.assign_tab:
-            hospital_names = [h.hospital_name for h in hospitals]
-            doctor_dnis = [d.dni for h in hospitals for d in h.doctors]
-            self.assign_tab.update_data(hospital_names, doctor_dnis)
+        pass
