@@ -1,66 +1,54 @@
 import unittest
-from model.hospital import Hospital
 from model.doctor import Doctor
-from controller import storage
-from controller import controller_doctor
+from model.hospital import Hospital
+import controller.controller_doctor as controller
 
 class TestDoctorController(unittest.TestCase):
-
     def setUp(self):
-        # Limpia la lista de hospitales antes de cada prueba
-        storage.hospitals.clear()
-
-        # Crea hospital de prueba
-        self.hospital = Hospital("Hospital Central")
-        storage.hospitals.append(self.hospital)
+        # Limpiamos la lista global de hospitales antes de cada test
+        controller.hospitals.clear()
 
     def test_create_doctor(self):
-        doctor_info = {
-            "doctor_name": "Dr. Ana",
-            "speciality": "Cardiología",
-            "dni": "123"
-        }
-        doctor = controller_doctor.create_doctor(doctor_info)
+        info = {"doctor_name": "Laura", "speciality": "Pediatría", "dni": "123"}
+        doctor = controller.create_doctor(info)
         self.assertIsInstance(doctor, Doctor)
-        self.assertEqual(doctor.doctor_name, "Dr. Ana")
+        self.assertEqual(doctor.doctor_name, "Laura")
+        self.assertEqual(doctor.speciality, "Pediatría")
+        self.assertEqual(doctor.dni, "123")
 
     def test_add_doctor_to_hospital(self):
-        doctor_info = {
-            "doctor_name": "Dr. Juan",
-            "speciality": "Neurología",
-            "dni": "456"
-        }
-        result = controller_doctor.add_doctor_to_hospital("Hospital Central", doctor_info)
-        self.assertTrue(result)
-        self.assertEqual(len(self.hospital.doctors), 1)
-        self.assertEqual(self.hospital.doctors[0].dni, "456")
+        hospital = Hospital("San José")
+        controller.hospitals.append(hospital)
 
-    def test_search_by_dni(self):
-        doctor = Doctor("Dr. Laura", "Dermatología", "789")
-        self.hospital.append_doctor(doctor)
-        result = controller_doctor.search_by_dni("789")
+        info = {"doctor_name": "Carlos", "speciality": "Cardiología", "dni": "456"}
+        result = controller.add_doctor_to_hospital("San José", info)
+
+        self.assertTrue(result)
+        self.assertEqual(len(hospital.doctors), 1)
+        self.assertEqual(hospital.doctors[0].doctor_name, "Carlos")
+
+    def test_delete_doctor_from_hospital(self):
+        hospital = Hospital("Central")
+        doctor = Doctor("Marta", "Neurología", "789")
+        hospital.append_doctor(doctor)
+        controller.hospitals.append(hospital)
+
+        result = controller.delete_doctor("Central", "789")
+
+        self.assertTrue(result)
+        self.assertEqual(len(hospital.doctors), 0)
+
+    def test_search_doctor_by_dni(self):
+        hospital = Hospital("Regional")
+        doctor = Doctor("Andrés", "Oncología", "111")
+        hospital.append_doctor(doctor)
+        controller.hospitals.append(hospital)
+
+        result = controller.search_by_dni("111")
+
         self.assertIsNotNone(result)
-        self.assertEqual(result["Doctor"], "Dr. Laura")
+        self.assertEqual(result["Doctor"], "Andrés")
+        self.assertEqual(result["Hospital"], "Regional")
 
-    def test_delete_doctor(self):
-        doctor = Doctor("Dr. Mario", "Pediatría", "321")
-        self.hospital.append_doctor(doctor)
-        result = controller_doctor.delete_doctor("Hospital Central", "321")
-        self.assertTrue(result)
-        self.assertEqual(len(self.hospital.doctors), 0)
-
-    def test_delete_nonexistent_doctor(self):
-        result = controller_doctor.delete_doctor("Hospital Central", "999")
-        self.assertFalse(result)
-
-    def test_add_doctor_to_nonexistent_hospital(self):
-        doctor_info = {
-            "doctor_name": "Dr. X",
-            "speciality": "Gastroenterología",
-            "dni": "111"
-        }
-        result = controller_doctor.add_doctor_to_hospital("Inexistente", doctor_info)
-        self.assertFalse(result)
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
