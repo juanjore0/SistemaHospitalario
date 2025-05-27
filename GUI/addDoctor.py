@@ -6,15 +6,15 @@ class DoctorTab(QWidget):
 
         layout = QVBoxLayout()
 
-        # Barra de búsqueda
+        # Barra de búsqueda (opcional, puedes conectar esto después)
         self.search_doctor = QLineEdit()
         self.search_doctor.setPlaceholderText('Buscar doctor...')
         layout.addWidget(self.search_doctor)
 
-        # Tabla de doctores
+        # Tabla de doctores con 4 columnas: Hospital, Nombre, DNI, Especialidad
         self.doctor_table = QTableWidget()
-        self.doctor_table.setColumnCount(3)
-        self.doctor_table.setHorizontalHeaderLabels(['ID', 'Nombre', 'Especialidad'])
+        self.doctor_table.setColumnCount(4)
+        self.doctor_table.setHorizontalHeaderLabels(['Hospital', 'Nombre', 'DNI', 'Especialidad'])
         layout.addWidget(self.doctor_table)
 
         # Botones
