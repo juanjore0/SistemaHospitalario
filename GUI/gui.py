@@ -20,7 +20,7 @@ class HospitalSystem(QWidget):
         self.hospitals_tab = HospitalTab()
         self.doctors_tab = DoctorTab()
 
-        self.hospital_controller = HospitalGUIController(self.hospitals_tab)
+        self.controller_hospital = HospitalGUIController(self.hospitals_tab)
 
         self.tabs.addTab(self.hospitals_tab, "Hospitales")
         self.tabs.addTab(self.doctors_tab, "Doctores")

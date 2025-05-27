@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QTableWidgetItem
-from controller import hospital_controller
+from controller import controller_hospital
 from controller.storage import hospitals
 
 class HospitalGUIController:
@@ -16,9 +16,9 @@ class HospitalGUIController:
         name = self.view.search_hospital.text().strip()
         if not name:
             return
-        if hospital_controller.find_hospital(name):  # Evitar duplicados
+        if controller_hospital.find_hospital(name):  # Evitar duplicados
             return
-        hospital_controller.create_hospital(name)
+        controller_hospital.create_hospital(name)
         self.view.search_hospital.clear()
         self.refresh_table()
 
@@ -28,7 +28,7 @@ class HospitalGUIController:
             return
 
         name = self.view.hospital_table.item(row, 0).text()
-        hospital_controller.delete_hospital(name)
+        controller_hospital.delete_hospital(name)
         self.refresh_table()
 
     def refresh_table(self):
